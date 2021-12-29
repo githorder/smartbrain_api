@@ -1,8 +1,8 @@
 const registerHandlerPost = (db, bcrypt) => (req, res) => {
   const { name, email, password } = req.body;
-  const hash = bcrypt.hashSync(password, 10);
 
   if (name && email && password) {
+    const hash = bcrypt.hashSync(password, 10);
     db.transaction((trx) => {
       return trx
         .insert({

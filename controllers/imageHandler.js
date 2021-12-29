@@ -13,7 +13,7 @@ const imageHandlerPut = (db) => (req, res) => {
       }
     })
     .catch(() => {
-      res.status(500).json('some server error');
+      res.status(500).json('invalid data provided');
     });
 };
 
