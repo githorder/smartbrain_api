@@ -9,16 +9,18 @@ const { rootHandlerGet } = require('./controllers/rootHandler');
 const { signinHandlerPost } = require('./controllers/signinHandler');
 const { registerHandlerPost } = require('./controllers/registerHandler');
 const { profileHandlerGet } = require('./controllers/profileHandler');
-const { imageHandlerPut } = require('./controllers/imageHandler');
+const {
+  imageHandlerPut,
+  imageHandlerPost,
+} = require('./controllers/imageHandler');
 
 const db = knex({
   client: 'pg',
   connection: {
-    host: '127.0.0.1',
-    port: '5432',
-    user: 'diyorbaynazarov',
-    password: 'Universe2000@',
-    database: 'smartbrain',
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
 });
 
@@ -28,11 +30,11 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// app.get('/', rootHandlerGet(db));
-app.get('/', (req, res) => res.send(`it's working`));
+app.get('/', rootHandlerGet(db));
 app.post('/signin', signinHandlerPost(db, bcrypt));
 app.post('/register', registerHandlerPost(db, bcrypt));
 app.get('/profile/:id', profileHandlerGet(db));
 app.put('/image', imageHandlerPut(db));
+app.post('/image', imageHandlerPost());
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
